@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine on
+    RewriteBase /client/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule .*[^/]$ %{REQUEST_URI}/ [L,R=301]
+    RewriteCond %{REQUEST_URI} ^/(.*)/$
+    RewriteCond %{DOCUMENT_ROOT}/client/%1.html -f
+    RewriteRule ^(.+)/$ $1.html [L]
+
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+  # If we don't have mod_rewrite installed, all 404's
+  # can be sent to index.php, and everything works as normal.
+
+  ErrorDocument 404 /index.php
+</IfModule>

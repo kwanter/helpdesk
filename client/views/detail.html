@@ -1,0 +1,410 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <button ng-controller="TicketController" class="btn btn-info" ng-click="reset()"><i class="icon-refresh icons"></i></i>&nbsp;Refresh</button>
+            <br><br>
+        </div>
+        <div class="col-md-6">
+            <div ng-controller="DetailController as detail">
+                <div class="card card-accent-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">Base Information</h3>
+                    </div>
+                    <form role="form" novalidate>
+                        <div class="card-body" id="detail">
+                            <div class="form-group col-md-12">
+                                <label for="">Ticket ID</label>
+                                <input type="hidden" ng-model="ticket.id_ticket" ng-value="ticket.id_ticket">
+                                <input type="text" disabled class="form-control" id="id_ticket" ng-value="ticket.id_ticket">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="date">Created Date</label>
+                                <input type="hidden" ng-model="ticket.created_date" ng-value="ticket.created_date">
+                                <input type="text" disabled class="form-control" id="date" ng-value="ticket.created_date">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="problems">Problems</label>
+                                <input type="hidden" ng-model="ticket.problems" ng-value="ticket.problems">
+                                <textarea disabled id="problems" name="problems" rows="2" class="form-control" ng-bind="ticket.problems"></textarea>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="user">User</label>
+                                <input type="hidden" ng-model="ticket.user" ng-value="ticket.username">
+                                <input type="text" disabled class="form-control" id="user" ng-value="ticket.username">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="pic">PIC</label>
+                                <!--
+                                <select id="pic" name="pic" class="form-control" ng-model="ticket.id_pic" ng-selected="true" required ng-options="data.pic for data in pic track by data.id_pic"></select>
+                                -->
+                                <select disabled id="pic" name="pic" class="form-control" ng-model="ticket.id_pic" required>
+                                    <option value="0">---Choose PIC---</option>
+                                    <option ng-repeat="data in pic" ng-selected="{{data.id_pic==ticket.id_pic}}" value="{{data.id_pic}}">{{data.pic}}</option>
+                                </select>
+                                <p ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
+                                    choose this form before you submit.</p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="category">Kategori</label>
+                                <!---
+                                <select id="pic" name="pic" class="form-control" ng-model="ticket.id_category" ng-selected="true" required ng-options="data.name_category for data in category track by data.id_category"></select>
+                                -->
+                                <select disabled id="category" name="kategori" class="form-control" ng-model="ticket.id_category"
+                                    required>
+                                    <option value="">---Choose Category---</option>
+                                    <option ng-repeat="data in category" ng-selected="{{data.id_category==ticket.id_category}}"
+                                        value="{{data.id_category}}">{{data.name_category}}</option>
+                                </select>
+
+                                <p disabled ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
+                                    choose this form before you
+                                    submit.</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button disabled type="submit" class="btn btn-primary">Update</button>
+                            <button disabled type="button" class="btn btn-danger">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card card-accent-danger" id="chat" ng-controller="ChatCtrl">
+                <div class="card-header">
+                    <h3 class="card-title">Chat</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="card-body">
+                    <div class="box box-warning direct-chat direct-chat-warning">
+                        <div class="box-body">
+                            <div class="direct-chat-messages">
+                                <div class="direct-chat-msg" ng-repeat="message in messages" ng-class="{'right':!message.me}">
+                                    <div class="direct-chat-info clearfix">
+                                        <span class="direct-chat-name" ng-class="{'pull-left':message.me, 'pull-right':!message.me}">{{
+                                            message.username }}</span>
+                                        <span class="direct-chat-timestamp " ng-class="{'pull-left':!message.me, 'pull-right':message.me}">{{
+                                            message.date }}</span>
+                                    </div>
+                                    <img class="direct-chat-img" src="/helpdesk/client/views/img/Unknown-person.gif"
+                                        alt="">
+                                    <div class="direct-chat-text right">
+                                        <span>{{ message.str_comment }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="card-footer">
+                    <form ng-submit="saveChat()">
+                        <div class="input-group">
+                            <input type="text" placeholder="Type To Chat..." class="form-control" ng-model="me.comment"
+                                ng-enter="saveChat()">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-warning btn-flat"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-accent-cyan" id="diagnose" ng-controller="DiagnoseCtrl">
+                <div class="card-header">
+                    <h3 class="card-title">Diagnoses</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="card-body">
+                    <div class="box box-warning direct-chat direct-chat-warning">
+                        <div class="box-body">
+                            <div class="direct-chat-messages">
+                                <div class="direct-chat-msg" ng-repeat="message in messages" ng-class="{'right':!message.me}">
+                                    <div class="direct-chat-info clearfix">
+                                        <span class="direct-chat-name" ng-class="{'pull-left':message.me, 'pull-right':!message.me}">{{
+                                            message.username }}</span>
+                                        <span class="direct-chat-timestamp " ng-class="{'pull-left':!message.me, 'pull-right':message.me}">{{
+                                            message.date }}</span>
+                                    </div>
+                                    <img class="direct-chat-img" src="/helpdesk/client/views/img/Unknown-person.gif"
+                                        alt="">
+                                    <div class="direct-chat-text right">
+                                        <span>{{ message.str_diagnose }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="card-footer">
+                    <form>
+                        <div class="input-group">
+                            <input disabled type="text" placeholder="Type Diagnose..." class="form-control" ng-model="me.diagnose">
+                            <span class="input-group-btn">
+                                <button disabled type="submit" class="btn btn-warning btn-flat"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card card-accent-green" id="solution" ng-controller="SolutionCtrl">
+                <div class="card-header">
+                    <h3 class="card-title">Solution</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="card-body">
+                    <div class="box box-warning direct-chat direct-chat-warning">
+                        <div class="box-body">
+                            <div class="direct-chat-messages">
+                                <div class="direct-chat-msg" ng-repeat="message in messages" ng-class="{'right':!message.me}">
+                                    <div class="direct-chat-info clearfix">
+                                        <span class="direct-chat-name" ng-class="{'pull-left':message.me, 'pull-right':!message.me}">{{message.username
+                                            }}</span>
+                                        <span class="direct-chat-timestamp " ng-class="{'pull-left':!message.me, 'pull-right':message.me}">{{message.date
+                                            }}</span>
+                                    </div>
+                                    <img class="direct-chat-img" src="/helpdesk/client/views/img/Unknown-person.gif"
+                                        alt="">
+                                    <div class="direct-chat-text right">
+                                        <span>{{ message.str_solution }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="card-footer">
+                    <form>
+                        <div class="input-group">
+                            <input disabled type="text" placeholder="Type Solution..." class="form-control" ng-model="me.solution">
+                            <span class="input-group-btn">
+                                <button disabled type="submit" class="btn btn-warning btn-flat"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-accent-red" id="progress" ng-controller="progressCtrl" data-ng-init="init()">
+                <div class="card-header">
+                    <h3 class="card-title">Progress Status</h3>
+                </div>
+                <!-- /.box-header -->
+                <form novalidate id="progress">
+                    <div class="card-body col-md-12">
+                        <div class="slidecontainer">
+                            <rzslider rz-slider-options="{disabled : true}" rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+                            <p>Progress : {{slider.value}} %</p>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <!-- /.box-body -->
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button disabled type="submit" class="btn btn-primary">Update</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* The slider itself */
+    .slider {
+        -webkit-appearance: none;
+        /* Override default CSS styles */
+        appearance: none;
+        width: 100%;
+        /* Full-width */
+        height: 25px;
+        /* Specified height */
+        background: #d3d3d3;
+        /* Grey background */
+        outline: none;
+        /* Remove outline */
+        opacity: 0.7;
+        /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: .2s;
+        /* 0.2 seconds transition on hover */
+        transition: opacity .2s;
+    }
+
+    /* Mouse-over effects */
+    .slider:hover {
+        opacity: 1;
+        /* Fully shown on mouse-over */
+    }
+
+    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .direct-chat-text {
+        border-radius: 5px;
+        position: relative;
+        padding: 5px 10px;
+        background: #D2D6DE;
+        border: 1px solid #D2D6DE;
+        margin: 5px 0 0 50px;
+        color: #444;
+    }
+
+    .direct-chat-msg,
+    .direct-chat-text {
+        display: block;
+        word-wrap: break-word;
+    }
+
+    .direct-chat-img {
+        border-radius: 50%;
+        float: left;
+        width: 40px;
+        height: 40px;
+    }
+
+    .direct-chat-info {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 12px;
+    }
+
+    .direct-chat-msg {
+        margin-bottom: 10px;
+    }
+
+    .direct-chat-messages,
+    .direct-chat-contacts {
+        -webkit-transition: -webkit-transform .5s ease-in-out;
+        -moz-transition: -moz-transform .5s ease-in-out;
+        -o-transition: -o-transform .5s ease-in-out;
+        transition: transform .5s ease-in-out;
+    }
+
+    .direct-chat-messages {
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+        padding: 10px;
+        height: 500px;
+        overflow: auto;
+        word-wrap: break-word;
+    }
+
+    .direct-chat-text:before {
+        border-width: 6px;
+        margin-top: -6px;
+    }
+
+    .direct-chat-text:after {
+        border-width: 5px;
+        margin-top: -5px;
+    }
+
+    .direct-chat-text:after,
+    .direct-chat-text:before {
+        position: absolute;
+        right: 100%;
+        top: 15px;
+        border: solid rgba(0, 0, 0, 0);
+        border-right-color: #D2D6DE;
+        content: ' ';
+        height: 0;
+        width: 0;
+        pointer-events: none;
+    }
+
+    .direct-chat-warning .right>.direct-chat-text {
+        background: #F39C12;
+        border-color: #F39C12;
+        color: #FFF;
+    }
+
+    .right .direct-chat-text {
+        margin-right: 50px;
+        margin-left: 0;
+    }
+
+    .direct-chat-warning .right>.direct-chat-text:after,
+    .direct-chat-warning .right>.direct-chat-text:before {
+        border-left-color: #F39C12;
+    }
+
+    .right .direct-chat-text:after,
+    .right .direct-chat-text:before {
+        right: auto;
+        left: 100%;
+        border-right-color: rgba(0, 0, 0, 0);
+        border-left-color: #D2D6DE;
+    }
+
+    .right .direct-chat-img {
+        float: right;
+    }
+
+    .box-footer {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-top: 1px solid #F4F4F4;
+        padding: 10px 0;
+        background-color: #FFF;
+    }
+
+    .direct-chat-name {
+        font-weight: 600;
+    }
+
+    .box-footer form {
+        margin-bottom: 10px;
+    }
+
+    input,
+    button,
+    .alert,
+    .modal-content {
+        border-radius: 0 !important;
+    }
+
+    .ml10 {
+        margin-left: 10px;
+    }
+</style>

@@ -1,0 +1,21 @@
+<div class="sidebar">
+  <nav class="sidebar-nav">
+    <ul class="nav">  
+      <li class="nav-title">
+          Main Navigation
+      </li>
+      <li permission="['Moderator','PIC']" ng-show="user.login === true" class="nav-item">
+        <a class="nav-link" ui-sref-active="active" ui-sref="app.main"><i class="icon-speedometer"></i> Dashboard </a>
+      </li>
+      <li permission="['User']" ng-show="user.login === true" class="nav-item">
+        <a class="nav-link" ui-sref-active="active" ui-sref="app.main_user"><i class="icon-speedometer"></i> Dashboard </a>
+      </li>
+      <li class="divider"></li>
+      <!---
+      <li class="nav-item">
+        <a class="nav-link" ui-sref-active="active" ui-sref="app.ticket"><i class="icon-briefcase"></i> Ticket Information</a>
+      </li>
+      -->
+    </ul>
+  </nav>
+</div>

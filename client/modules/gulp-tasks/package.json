@@ -1,0 +1,52 @@
+{
+  "_from": "gulp-tasks",
+  "_id": "gulp-tasks@0.0.2",
+  "_inBundle": false,
+  "_integrity": "sha1-yDJDEUg77JP2tBjm6mr6JV3beaQ=",
+  "_location": "/gulp-tasks",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "gulp-tasks",
+    "name": "gulp-tasks",
+    "escapedName": "gulp-tasks",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/gulp-tasks/-/gulp-tasks-0.0.2.tgz",
+  "_shasum": "c8324311483bec93f6b418e6ea6afa255ddb79a4",
+  "_spec": "gulp-tasks",
+  "_where": "/Applications/MAMP/htdocs/AngularJS_AdminLTE2",
+  "author": {
+    "name": "Blake La Pierre"
+  },
+  "bugs": {
+    "url": "https://github.com/blakelapierre/gulp-tasks/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Loads gulp tasks from external files.",
+  "homepage": "https://github.com/blakelapierre/gulp-tasks",
+  "keywords": [
+    "gulpfriendly",
+    "tasks",
+    "gulp"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "gulp-tasks",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blakelapierre/gulp-tasks.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.2"
+}
