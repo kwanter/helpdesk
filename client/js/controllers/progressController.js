@@ -1,6 +1,6 @@
 var app = angular.module('app');
 
-app.controller('progressCtrl',['$scope','$http','TicketService','DataService', function($scope,$http,TicketService,DataService){
+app.controller('progressCtrl',['$scope','$http','$route','TicketService','DataService', function($scope,$http,$route,TicketService,DataService){
     $scope.submit = submit;
     $scope.id_ticket = ''; 
     var id = DataService.get();
@@ -54,7 +54,8 @@ app.controller('progressCtrl',['$scope','$http','TicketService','DataService', f
     }
 
     function reset(){
-        $state.go($state.$current, null, { reload: true });
+        //$state.go($state.$current, null, { reload: true });
+        $route.reload();
     }
 
 }]);

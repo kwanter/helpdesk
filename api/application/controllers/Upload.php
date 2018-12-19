@@ -19,66 +19,46 @@ class Upload extends REST_Controller {
     }
 
     public function index_post() {
-        if (!$this->post('ticket')) {
-            $this->response(null, 400);
-        }
-        
-        $id = $this->upload_file($file);
-
-        if (!is_null($id)) {
-            $this->response(array('response' => "ID : ".$id." Success"), 200);
-        } else {
-            $this->response(array('error', 'Fail to post ticket...'), 400);
-        }
-    }
-
-    public function index_put() {
-        if (!$this->put('ticket')) {
+        if (!$this->post('id_ticket')) {
             $this->response("No Data Sent", 400);
         }
         
-        $update = $this->tickets->update($this->put('ticket'));
+        $id = $this->post('id_ticket');
+        //$file = $this->input->post('file');
+        $update = $this->upload_file($id);
 
         if (!is_null($update)) {
-            $this->response(array('response' => 'Ticket Updated!'), 200);
+            $this->response(array('response' => 'Upload Success!'), 200);
         } else {
-            $this->response(array('error', 'Fail to update ticket data...'.$update), 400);
+            $this->response(array('error', 'Fail to Upload...'.$update), 400);
         }
     }
 
     function upload_file($id){
         $tahun = (new DateTime())->format('Y');
         $bulan = (new DateTime())->format('M');
-        $type  = 'foto';
-        $path  = $_FILES['foto']['name'];
+        $hari  = (new DateTime())->format('D');
+        $waktu = (new DateTime())->format('H:i:s');
+        $type  = 'attachment';
+        $path  = $_FILES['file']['name'];
         $ext   = pathinfo($path, PATHINFO_EXTENSION);
 
-        if($check != NULL){
-            if($check->foto != NULL){
-                //$temp = rtrim($check->foto,'_foto_'.$old_bulan.'_'.$old_tahun.'_'.$id);
-                $temp = substr($check->foto,0,3);
-                $num  = (int)$temp;
-                $num += 1;
-            }
-        }else{
-            $num = 1;
-        }
-
-        $new_name   = $num."_foto_".$bulan."_".$tahun."_".$id;
-        $folderName = $id;
+        $new_name   = "attch_".$waktu."_".$hari."_".$bulan."_".$tahun."_".$id;
+        $user = $this->tickets->get_user($id);      
+        $folderName = $user['id_user'];
         $config['file_name']   = $new_name;
-        $config['upload_path'] = './edok/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan;
+        $config['upload_path'] = './file/'.$folderName.'/'.$type.'/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
         $config['quality'] = '75';
 
-        if(!is_dir('./edok/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan))
+        if(!is_dir('./file/'.$folderName.'/'.$type))
         {
-            mkdir('./edok/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan, 0777,true);
+            mkdir('./file/'.$folderName.'/'.$type, 0777,true);
         }
 
         $this->upload->initialize($config);
 
-        if($this->upload->do_upload('foto'))
+        if($this->upload->do_upload('file'))
         {
             $gbr     = $this->upload->data();
             $configer =  array(
@@ -94,14 +74,10 @@ class Upload extends REST_Controller {
             $gambar  = $gbr['file_name']; //Mengambil file name dari gambar yang diupload
             $type    = $gbr['image_type'];
             $now = (new DateTime())->format('Y-m-d');
-            $this->pegawai->simpan_upload($id,$gambar,$type);
-            $this->pegawai->upload_time($id,$now);
-
+            $this->tickets->simpan_upload($id,$gambar,$type);
             return TRUE;
         }
         else{
-            //$this->pegawai->simpan_upload($id,'','');
-            echo $this->upload->display_errors('<p>', '</p>');
             return FALSE;
         }
     }

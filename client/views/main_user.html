@@ -11,7 +11,7 @@
 <div class="animated fadeIn" ng-controller="AuthController as auth">
     <div class="row" ng-controller="TicketController as ctrl" data-ng-init="init()">
         <!--new ticket-->
-        <div class="col-sm-6 col-lg-3">
+        <div permission='["User"]' class="col-sm-6 col-lg-3">
             <div class="card text-white bg-info">
                 <div class="card-body pb-0">
                     <div class="btn-group float-right">
@@ -32,8 +32,7 @@
             </div>
         </div>
         <!--/.col-->
-
-        <div class="col-sm-6 col-lg-3">
+        <div permission='["User"]' class="col-sm-6 col-lg-3">
             <div class="card text-white bg-warning">
                 <div class="card-body pb-0">
                     <div class="btn-group float-right">
@@ -54,8 +53,7 @@
             </div>
         </div>
         <!--/.col-->
-
-        <div class="col-sm-6 col-lg-3">
+        <div permission='["User"]' class="col-sm-6 col-lg-3">
             <div class="card text-white bg-danger">
                 <div class="card-body pb-0">
                     <div class="btn-group float-right">
@@ -76,8 +74,7 @@
             </div>
         </div>
         <!--/.col-->
-
-        <div class="col-sm-6 col-lg-3">
+        <div permission='["User"]' class="col-sm-6 col-lg-3">
             <div class="card text-white bg-success">
                 <div class="card-body pb-0">
                     <div class="btn-group float-right">
@@ -98,7 +95,6 @@
             </div>
         </div>
         <!--/.col-->
-
     </div>
     <!--/.row-->
 
@@ -153,7 +149,7 @@
                                     <center><span ng-bind="c.id_ticket"></span></center>
                                 </td>
                                 <td><span ng-bind="c.problems"></span></td>
-                                <td><span ng-bind="c.attachment"></span></td>
+                                <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                                 <td><span ng-bind="c.pic"></span></td>
                                 <td><span ng-bind="c.created_date"></span></td>
                                 <td>
@@ -217,7 +213,7 @@
                                     <center><span ng-bind="c.id_ticket"></span></center>
                                 </td>
                                 <td><span ng-bind="c.problems"></span></td>
-                                <td><span ng-bind="c.attachment"></span></td>
+                                <td><span><td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td></span></td>
                                 <td><span ng-bind="c.pic"></span></td>
                                 <td>
                                     <div class="clearfix">
@@ -392,7 +388,7 @@
                                     <center>Problems</center>
                                 </th>
                                 <th width="15%">
-                                    <center>Kategori</center>
+                                    <center>Category</center>
                                 </th>
                                 <th width="15%">
                                     <center>PIC</center>
@@ -484,7 +480,7 @@
                       <!-- Attachment -->
                       <div class="form-group">
                         <label><b>Attachment</b></label>
-                        <input type="file" class="form-control" ng-model="ticket.attachment">
+                        <input type="file" id="file" name="file" class="form-control" file-model="myFile" ng-model="ticket.attachment">
                       </div>
                       <div class="form-group">
                         <p class="response"> {{PostDataResponse}}</p>

@@ -16,13 +16,14 @@ var app = angular
   'ui.router',
   'oc.lazyLoad',
   'ncy-angular-breadcrumb',
-  'angular-loading-bar',
   'ui.bootstrap',
   'angularUtils.directives.dirPagination',
   'rzModule',
   'ngStorage',
   'ngResource',
-  'AuthServices'
+  'AuthServices',
+  'angular-loading-bar',
+  'ngRoute'
 ])
 .config(['cfpLoadingBarProvider', '$qProvider', function (cfpLoadingBarProvider, $qProvider) {
   cfpLoadingBarProvider.includeSpinner = false;
@@ -36,6 +37,7 @@ var app = angular
   $rootScope.$state = $state;
   return $rootScope.$stateParams = $stateParams;
 }]);
+
 app.directive('ngEnter', function () {
   return function (scope, element, attrs) {
     element.bind("keydown keypress", function (event) {
@@ -47,17 +49,18 @@ app.directive('ngEnter', function () {
       }
     });
   };
-})
-  .run(['$rootScope', '$location', 'AuthenticationService', function ($rootScope, $location, AuthenticationService) {
-    AuthenticationService.init();
+});
 
+app.run(['$rootScope', '$location', 'AuthenticationService', function ($rootScope, $location, AuthenticationService) {
+  AuthenticationService.init();
   $rootScope.$on('$routeChangeStart', function (event, next) {
     if (!AuthenticationService.checkPermissionForView(next)) {
       event.preventDefault();
-      //$location.path("/login");
+      $location.path("/not_login");
     }
   });
 }]);
+
 app.filter('startFrom', function () {
   return function (input, start) {
     start = +start; //parse to int

@@ -76,8 +76,9 @@ class Ticket_model extends CI_Model
                 'created_date' => $date,
                 'created_by'   => $user
             ];
-            $this->db->set($data)->where('id_ticket', $this->db->insert_id())->update('ticket');
-            return $this->db->insert_id();
+            $id = $this->db->insert_id();
+            $this->db->set($data)->where('id_ticket', $id)->update('ticket');
+            return $id;
         }
 
         return null;
@@ -145,5 +146,15 @@ class Ticket_model extends CI_Model
         $datetime = new DateTime();
         $datetime->setTimezone($tz_object);
         return $datetime->format('Y\-m\-d\ H:i:s');
+    }
+
+    function simpan_upload($id,$attachment,$type){
+        $where = array('id_ticket' => $id);
+        $data = array(
+            'attachment' => $attachment,
+        );
+        $this->db->update('ticket',$data,$where);
+
+        return $this->db->affected_rows();
     }
 }

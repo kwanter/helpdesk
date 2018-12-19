@@ -11,13 +11,13 @@
                         <h3 class="card-title">Base Information</h3>
                     </div>
                     <form role="form" novalidate>
-                        <div class="card-body" id="detail">
-                            <div class="form-group col-md-12">
+                        <div class="card-group" id="detail">    
+                            <div class="form-group col-md-6">
                                 <label for="">Ticket ID</label>
                                 <input type="hidden" ng-model="ticket.id_ticket" ng-value="ticket.id_ticket">
                                 <input type="text" disabled class="form-control" id="id_ticket" ng-value="ticket.id_ticket">
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label for="date">Created Date</label>
                                 <input type="hidden" ng-model="ticket.created_date" ng-value="ticket.created_date">
                                 <input type="text" disabled class="form-control" id="date" ng-value="ticket.created_date">
@@ -27,38 +27,39 @@
                                 <input type="hidden" ng-model="ticket.problems" ng-value="ticket.problems">
                                 <textarea disabled id="problems" name="problems" rows="2" class="form-control" ng-bind="ticket.problems"></textarea>
                             </div>
-                            <div class="form-group col-md-12">
-                                <label for="user">User</label>
-                                <input type="hidden" ng-model="ticket.user" ng-value="ticket.username">
-                                <input type="text" disabled class="form-control" id="user" ng-value="ticket.username">
-                            </div>
                             <div class="form-group col-md-6">
-                                <label for="pic">PIC</label>
-                                <!--
-                                <select id="pic" name="pic" class="form-control" ng-model="ticket.id_pic" ng-selected="true" required ng-options="data.pic for data in pic track by data.id_pic"></select>
-                                -->
-                                <select disabled id="pic" name="pic" class="form-control" ng-model="ticket.id_pic" required>
-                                    <option value="0">---Choose PIC---</option>
-                                    <option ng-repeat="data in pic" ng-selected="{{data.id_pic==ticket.id_pic}}" value="{{data.id_pic}}">{{data.pic}}</option>
-                                </select>
-                                <p ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
-                                    choose this form before you submit.</p>
+                                <label for="attachment">Attachment</label>
+                                <span class="form-control"><a ng-if="ticket.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{ticket.attachment}}">Attachment</a></span>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="category">Kategori</label>
-                                <!---
-                                <select id="pic" name="pic" class="form-control" ng-model="ticket.id_category" ng-selected="true" required ng-options="data.name_category for data in category track by data.id_category"></select>
-                                -->
-                                <select disabled id="category" name="kategori" class="form-control" ng-model="ticket.id_category"
-                                    required>
-                                    <option value="">---Choose Category---</option>
-                                    <option ng-repeat="data in category" ng-selected="{{data.id_category==ticket.id_category}}"
-                                        value="{{data.id_category}}">{{data.name_category}}</option>
-                                </select>
-
-                                <p disabled ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
-                                    choose this form before you
-                                    submit.</p>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user">User</label>
+                                    <input type="hidden" ng-model="ticket.user" ng-value="ticket.username">
+                                    <input type="text" disabled class="form-control" id="user" ng-value="ticket.username">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="pic">PIC</label>
+                                    <select disabled id="pic" name="pic" class="form-control" ng-model="ticket.id_pic" required>
+                                        <option value="0">---Choose PIC---</option>
+                                        <option ng-repeat="data in pic" ng-selected="{{data.id_pic==ticket.id_pic}}" value="{{data.id_pic}}">{{data.pic}}</option>
+                                    </select>
+                                    <p ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
+                                        choose this form before you submit.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="category">Kategori</label>
+                                    <select disabled id="category" name="kategori" class="form-control" ng-model="ticket.id_category" required>
+                                        <option value="">---Choose Category---</option>
+                                        <option ng-repeat="data in category" ng-selected="{{data.id_category==ticket.id_category}}" value="{{data.id_category}}">{{data.name_category}}</option>
+                                    </select>
+                                    <p disabled ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please
+                                        choose this form before you
+                                        submit.</p>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -323,7 +324,7 @@
         -o-transform: translate(0, 0);
         transform: translate(0, 0);
         padding: 10px;
-        height: 500px;
+        height: 300px;
         overflow: auto;
         word-wrap: break-word;
     }

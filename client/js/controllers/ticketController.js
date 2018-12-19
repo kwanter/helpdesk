@@ -1,7 +1,7 @@
 var app = angular.module("app");
 
-app.controller('TicketController', ['$scope', 'TicketService','DataService','$http', '$state','$location','$window','$log','$sessionStorage',
-    function ($scope,TicketService,DataService,$http,$state,$location,$window,$log,$sessionStorage) {
+app.controller('TicketController', ['$scope', 'TicketService','DataService','$http', '$state','$location','$window','$route','$log','$localStorage',
+    function ($scope,TicketService,DataService,$http,$state,$location,$window,$route,$log,$localStorage) {
 
     $scope.ticket = { 
         id_ticket       : null, 
@@ -286,25 +286,6 @@ app.controller('TicketController', ['$scope', 'TicketService','DataService','$ht
         } 
     }
 
-    $scope.upload = function (value) {
-        var fd = new FormData();
-        var ip = self.location.host;
-
-        angular.forEach($scope.uploadfiles, function (file) {
-            fd.append('file', file);
-        });
-
-        $http({
-            method: 'post',
-            url: 'http://'+ip+'/helpdesk/api/upload',
-            data: fd,
-            headers: { 'Content-Type': undefined },
-        }).then(function successCallback(response) {
-            // Store response data
-            $scope.response = response.data;
-        });
-    }
-
     findAllTickets();
 
     function findAllTickets() {
@@ -340,7 +321,8 @@ app.controller('TicketController', ['$scope', 'TicketService','DataService','$ht
     }
 
     function reset() {
-        $state.go($state.$current, null, { reload: true });
+        //$state.go($state.$current, null, { reload: true });
+        $route.reload();
     }
 
 }]);

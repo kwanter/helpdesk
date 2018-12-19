@@ -1,7 +1,7 @@
 var app = angular.module("app");
 
 app.controller("modalTicketFormController",
-    function ($scope, $uibModal,$log ,$http,$state,TicketService) {
+    function ($scope, $uibModal,$log ,$http,$state,TicketService,$route) {
         $scope.date = new Date();
         $scope.user_list = {
             id_user : '',
@@ -47,47 +47,42 @@ app.controller("modalTicketFormController",
                 templateUrl: 'modal-form.html', // loads the template
                 backdrop: true, // setting backdrop allows us to close the modal window on clicking outside the modal window
                 windowClass: 'modal', // windowClass - additional CSS class(es) to be added to a modal window template
-                controller: function ($scope, $uibModalInstance, $log, ticket,$state,$sessionStorage) {
+                controller: function ($scope, $uibModalInstance, $log, ticket,$state,$localStorage,fileUpload) {
                     $scope.ticket = ticket;
-                    findAllUsers
                     $scope.submit = function () {
                         $log.log('Submiting ticket.'); // kinda console logs this statement
                         var data = {
-                            "ticket" : {
+                            "ticket": {
                                 'problems': ticket.problems,
                                 'attachment': ticket.attachment,
                                 'id_category': ticket.id_category,
-                                'id_user': $sessionStorage.user.id_user,
+                                'id_user': $localStorage.user.id_user,
                                 'id_pic': ticket.id_pic,
                                 'stat': ticket.stat,
                                 'progress': ticket.progress,
                                 'created_date': ticket.created_date,
                                 'created_by': ticket.created_by,
-                                'user' : $sessionStorage.user.user
+                                'user': $localStorage.user.user
                             }
                         };
 
-                        var config = {
-                            headers: {
-                                'Content-Type': 'application/json;'
-                            }
-                        }
-
-                        $log.log(data);
-                        $http.post(url, data, config)
-                            .then(function (data, status, headers, config) {
-                                //alert(JSON.stringify(data));
-                                alert('Ticket Has Been Submitted');
+                        var file = $scope.myFile;
+                        console.log('file is ');
+                        console.dir(file);
+                        var uploadUrl = 'http://' + ip + '/helpdesk/api/upload';
+                        
+                        TicketService.createTicket(data).then(
+                            function(r){
+                                fileUpload.uploadFileToUrl(file, uploadUrl, r['id']);
+                                alert('Tiket Berhasil Dibuat');
                                 $uibModalInstance.dismiss('cancel');
-                                $state.go($state.$current, null, { reload: true }); 
-                            }),
-                            function (data, status, header, config) {
-                                $('.response').addClass('error');
-                                $scope.ResponseDetails = "data: " + data +
-                                    "<br />status: " + status +
-                                    "<br />headers: " + header +
-                                    "<br />config: " + config;
-                            };
+                                //$state.go($state.$current, null, { reload: true });
+                                $route.reload();
+                            },
+                            function(err){
+                                console.log('Gagal Buat Tiket');
+                            }
+                        );
                     }
                     $scope.cancel = function () {
                         $uibModalInstance.dismiss('cancel');
@@ -96,6 +91,7 @@ app.controller("modalTicketFormController",
                 },
                 resolve: {
                     ticket: function () {
+                        $state.go($state.$current, null, { reload: true }); 
                         return $scope.ticket;
                     }
                 }

@@ -11,7 +11,7 @@
 <div class="animated fadeIn" ng-controller="AuthController as auth">
   <div class="row" ng-controller="TicketController as ctrl" data-ng-init="init()">
     <!--new ticket-->
-    <div class="col-sm-6 col-lg-3">
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
       <div class="card text-white bg-info">
         <div class="card-body pb-0">
           <div class="btn-group float-right">
@@ -32,7 +32,7 @@
     </div>
     <!--/.col-->
 
-    <div class="col-sm-6 col-lg-3">
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
         <div class="card text-white bg-warning">
           <div class="card-body pb-0">
           <div class="btn-group float-right">
@@ -54,7 +54,7 @@
     </div>
     <!--/.col-->
 
-    <div class="col-sm-6 col-lg-3">
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
       <div class="card text-white bg-danger">
         <div class="card-body pb-0">
           <div class="btn-group float-right">
@@ -75,7 +75,7 @@
     </div>
     <!--/.col-->
 
-    <div class="col-sm-6 col-lg-3">
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
       <div class="card text-white bg-success">
         <div class="card-body pb-0">
           <div class="btn-group float-right">
@@ -95,11 +95,10 @@
       </div>
     </div>
     <!--/.col-->
-  
   </div>
   <!--/.row-->
 
-  <div class="row">
+  <div permission="['PIC','Moderator']" class="row">
     <div class="col-md-12">
       <div>
         <div class="page-body">
@@ -126,8 +125,11 @@
                   <th width="5%">
                     <center>ID Ticket
                   </th>
-                  <th width="65%">
+                  <th width="55%">
                     <center>Problems
+                  </th>
+                  <th width="10%">
+                    <cemter>Attachment</cemter>
                   </th>
                   <th width="10%">
                     <center>User
@@ -147,6 +149,7 @@
                     <center><span ng-bind="c.id_ticket"></span></center>
                   </td>
                   <td><span ng-bind="c.problems"></span></td>
+                  <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                   <td><span ng-bind="c.username"></span></td>
                   <td><span ng-bind="c.created_date"></span></td>
                   <td>
@@ -175,14 +178,17 @@
                     <th width="5%">
                       <center>ID Ticket
                     </th>
-                    <th width="65%">
+                    <th width="55%">
                       <center>Problems
                     </th>
                     <th width="10%">
-                      <center>User
+                      <center>Attachment</center>
                     </th>
                     <th width="10%">
                       <center>User
+                    </th>
+                    <th width="10%">
+                      <center>Created Date
                     </th>
                     <th width="10%">
                       <center>Action
@@ -196,6 +202,7 @@
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
+                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                     <td><span ng-bind="c.username"></span></td>
                     <td><span ng-bind="c.created_date"></span></td>
                     <td>
@@ -235,11 +242,17 @@
                     <th width="5%">
                       <center>ID Ticket
                     </th>
-                    <th width="45%">
+                    <th width="40%">
                       <center>Problems
+                    </th>
+                    <th width="5%">
+                      <center>Attachment</center>
                     </th>
                     <th width="10%">
                       <center>PIC
+                    </th>
+                    <th>
+                      <center>User</center>
                     </th>
                     <th width="20%">
                       <center>Progress
@@ -259,7 +272,9 @@
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
+                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                     <td><span ng-bind="c.pic"></span></td>
+                    <td><span>{{c.user}}</span></td>
                     <td>
                       <div class="clearfix">
                         <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
@@ -297,8 +312,11 @@
                     <th width="45%">
                       <center>Problems
                     </th>
+                    <th width="5%">
+                      <center>Attachment</center>
+                    </th>
                     <th width="10%">
-                      <center>PIC
+                      <center>User
                     </th>
                     <th width="20%">
                       <center>Progress
@@ -318,7 +336,8 @@
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
-                    <td><span ng-bind="c.pic"></span></td>
+                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span ng-bind="c.user"></span></td>
                     <td>
                       <div class="clearfix">
                         <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
@@ -668,7 +687,7 @@
                     <center>Problems</center>
                   </th>
                   <th width="5%">
-                    <center>Kategori</center>
+                    <center>Category</center>
                   </th>
                   <th width="10%">
                     <center>User</center>
@@ -723,8 +742,24 @@
       <!-- /.box Box Completed End-->
     </div>
   </div>
-</div>
-<div>
+  <div class="row justify-content-center" permission='["Not_User"]'>
+    <div class="col-md-6">
+      <div class="clearfix">
+        <h1 class="float-left display-3 mr-4">500</h1>
+        <h4 class="pt-3">Houston, we have a problem!</h4>
+        <p class="text-muted">You Dont Have Permission To Access This Application. Please Contact Your IT Team</p>
+      </div>
+      <div class="input-prepend input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-search"></i></span>
+        </div>
+        <input id="prependedInput" class="form-control" size="16" type="text" placeholder="What are you looking for?">
+        <span class="input-group-append">
+          <button class="btn btn-info" type="button">Search</button>
+        </span>
+      </div>
+    </div>
+  </div>
   <div class="col-md-12">
     <!-- Modal -->
     <script type="text/ng-template" id="modal-form.html">
@@ -784,9 +819,8 @@
       </ul>
     </script>
   </div>
-</div>
-<script type="text/javascript">
-   function showNewTicket() {
+  <script type="text/javascript">
+    function showNewTicket() {
       /*
       var url = 'http//127.0.0.1/helpdesk/api/';
       var xmlhttp = new XMLHttpRequest();
@@ -803,4 +837,5 @@
       xmlhttp.send();
       */
     }
-</script>
+  </script>
+</div>

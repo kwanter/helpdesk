@@ -1,11 +1,15 @@
-var upload = angular.module('app', []);
-upload.directive('ngFile', ['$parse', function ($parse) {
+var app = angular.module('app');
+app.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
             element.bind('change', function () {
-                $parse(attrs.ngFile).assign(scope, element[0].files)
-                scope.$apply();
+                scope.$apply(function () {
+                    modelSetter(scope, element[0].files[0]);
+                });
             });
         }
     };

@@ -59,16 +59,15 @@ class Ticket extends REST_Controller {
         }
         
         $id = $this->tickets->save($this->post('ticket'));
-
+        //$this->upload_file($id);
         if (!is_null($id)) {
-            $this->response(array('response' => "ID : ".$id." Success"), 200);
+            $this->response(array('id' => $id), 200);
         } else {
             $this->response(array('error', 'Fail to post ticket...'), 400);
         }
     }
 
-    public function index_put()
-    {
+    public function index_put() {
         if (!$this->put('ticket')) {
             $this->response("No Data Sent", 400);
         }
@@ -82,8 +81,7 @@ class Ticket extends REST_Controller {
         }
     }
 
-    public function index_delete($id)
-    {
+    public function index_delete($id) {
         if (!$id) {
             $this->response(null, 400);
         }
@@ -94,6 +92,66 @@ class Ticket extends REST_Controller {
             $this->response(array('response' => 'Ticket Canceled!'), 200);
         } else {
             $this->response(array('error', 'Fail to cancel ticket...'), 400);
+        }
+    }
+
+    function upload_file($id){
+        $tahun = (new DateTime())->format('Y');
+        $bulan = (new DateTime())->format('M');
+        $type  = 'type';
+        $path  = $_FILES['file']['name'];
+        $ext   = pathinfo($path, PATHINFO_EXTENSION);
+
+        if($check != NULL){
+            if($check->foto != NULL){
+                //$temp = rtrim($check->foto,'_foto_'.$old_bulan.'_'.$old_tahun.'_'.$id);
+                $temp = substr($check->foto,0,3);
+                $num  = (int)$temp;
+                $num += 1;
+            }
+        }else{
+            $num = 1;
+        }
+
+        $new_name   = $num."_attch_".$bulan."_".$tahun."_".$id;
+        $folderName = $id;
+        $config['file_name']   = $new_name;
+        $config['upload_path'] = './file/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan;
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+        $config['quality'] = '75';
+
+        if(!is_dir('./file/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan))
+        {
+            mkdir('./file/'.$folderName.'/'.$type.'/'.$tahun.'/'.$bulan, 0777,true);
+        }
+
+        $this->upload->initialize($config);
+
+        if($this->upload->do_upload('file'))
+        {
+            $gbr     = $this->upload->data();
+            $configer =  array(
+                'image_library'   => 'gd2',
+                'source_image'    =>  $gbr['full_path'],
+                'maintain_ratio'  =>  TRUE,
+                'width'           =>  1440,
+                'height'          =>  1920,
+            );
+            $this->image_lib->clear();
+            $this->image_lib->initialize($configer);
+            $this->image_lib->resize();
+            $gambar  = $gbr['file_name']; //Mengambil file name dari gambar yang diupload
+            $type    = $gbr['image_type'];
+            $now = (new DateTime())->format('Y-m-d');
+            $this->tickets->simpan_upload($id,$gambar,$type);
+            //$this->tickets->upload_time($id,$now);
+
+            return TRUE;
+        }
+        else{
+            //$this->pegawai->simpan_upload($id,'','');
+            //echo $this->upload->display_errors('<p>', '</p>');
+            return FALSE;
         }
     }
 }

@@ -1,50 +1,52 @@
 var app = angular.module("app");
 
-app.controller('AuthController', ['$scope', '$state','$sessionStorage','AuthenticationService','$location',
-    function ($scope, $state,$sessionStorage, AuthenticationService,$location) {
+app.controller('AuthController', ['$scope', '$state','$route','$localStorage','AuthenticationService','$location',
+    function ($scope, $route,$state,$localStorage, AuthenticationService,$location) {
         $scope.ip    = '192.168.0.0';
         $scope.login = login;
         $scope.reset = reset;
         $scope.init = start();
 
         function GetUserIP() {
-            var ret_ip;
             var ip = self.location.host;
             $.ajaxSetup({ async: false });
             $.get('http://'+ip+'/helpdesk/api/ip', function (r) {
-                ret_ip = r.ip;
+                $scope.ip = r.ip;
             });
-            $scope.ip = ret_ip;
+            console.log('IP : ' + $scope.ip);
         }
 
         function start(){
             GetUserIP();
             login();
-            //console.log($sessionStorage.user.id_user);
-            if($sessionStorage.user.permissions == 'User'){
-                $location.path('/dashboard_user');
-            } else if ($sessionStorage.user.permissions == 'PIC' || $sessionStorage.user.permissions == 'Moderator'){
+            //console.log($localStorage.user.id_user);
+            //console.log($localStorage.user.ip_addr);
+            if ($localStorage.user.permissions === 'PIC' || $localStorage.user.permissions === 'Moderator'){
                 $location.path('/dashboard');
+            }
+            else if ($localStorage.user.permissions === 'User') {
+                $location.path('/dashboard_user');
             } else{
                 $location.path('/not_login');
-            }
+            }  
         }
 
         function reset() {
-            $state.go($state.$current, null, { reload: true });
+            //$state.go($state.$current, null, { reload: true });
+            $route.reload();
         }
 
         function login(){
            AuthenticationService.login($scope.ip)
             .then(
                 function(response){
-                    console.log('Login Success');
-                    //console.log(JSON.stringify($sessionStorage.user));
+                    //console.log('Autentikasi Sukses');
+                    console.log(JSON.stringify($localStorage.user));
                 },
                 function(errResponse){
-                    console.log('Login Failed ' + $scope.ip);
+                    //console.log('Autentikasi Gagal ' + $scope.ip);
+                    console.log($localStorage.user);
                     $location.path('/not_login');
-                    //console.log($sessionStorage.userSession);
                 }
            );
         }

@@ -1,5 +1,5 @@
 var chat = angular.module('app');
-chat.controller('ChatCtrl', ['$rootScope','$scope', '$http', '$q', '$state', 'DataService', 'TicketService', function ($rootScope,$scope, $http, $q, $state, DataService, TicketService) {
+chat.controller('ChatCtrl', ['$rootScope','$scope','$route', '$http', '$q', '$state', 'DataService', 'TicketService', function ($rootScope,$scope,$route, $http, $q, $state, DataService, TicketService) {
     var ip = self.location.host;
     var url = 'http://'+ip+'/helpdesk/api/';
     $scope.id_ticket = DataService.get();
@@ -110,7 +110,8 @@ chat.controller('ChatCtrl', ['$rootScope','$scope', '$http', '$q', '$state', 'Da
     };
 
     function reset() {
-        $state.go($state.$current, null, { reload: true });
+        //$state.go($state.$current, null, { reload: true });
+        $route.reload();
     }
 
     $scope.getUser = function () {

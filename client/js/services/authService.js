@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('AuthenticationService', function ($resource, $rootScope, $sessionStorage, $q) {
+angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('AuthenticationService', function ($resource, $rootScope, $localStorage, $q) {
     /**
        *  User profile resource
        */
@@ -21,6 +21,8 @@ angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('Authenticat
     auth.init = function () {
         if (auth.isLoggedIn()) {
             $rootScope.user = auth.currentUser();
+        }else{
+            auth.logout();
         }
     };
 
@@ -28,17 +30,20 @@ angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('Authenticat
         return $q(function (resolve, reject) {
             Profile.login({ id: ip_addr }).$promise
                 .then(function (data) {
-                    $sessionStorage.user = data;
-                    $rootScope.user = $sessionStorage.user;
+                    $localStorage.user = data;
+                    $localStorage.user.server_addr = ip;
+                    $rootScope.user = $localStorage.user;
+                    //console.log(ip_addr);
                     resolve();
                 }, function () {
+                    console.log(ip_addr);
                     reject();
                 });
         });
     };
 
     auth.logout = function () {
-        delete $sessionStorage.user;
+        delete $localStorage.user;
         delete $rootScope.user;
     };
 
@@ -72,7 +77,7 @@ angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('Authenticat
 
         var found = false;
         angular.forEach(permissions, function (permission, index) {
-            if ($sessionStorage.user.permissions.indexOf(permission) >= 0) {
+            if ($localStorage.user.permissions.indexOf(permission) >= 0) {
                 found = true;
                 return;
             }
@@ -83,12 +88,12 @@ angular.module('AuthServices', ['ngResource', 'ngStorage']).factory('Authenticat
 
 
     auth.currentUser = function () {
-        return $sessionStorage.user;
+        return $localStorage.user;
     };
 
 
     auth.isLoggedIn = function () {
-        return $sessionStorage.user != null;
+        return $localStorage.user != null;
     };
 
 

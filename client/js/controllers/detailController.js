@@ -1,7 +1,7 @@
 var app = angular.module("app");
 
-app.controller('DetailController',['$scope','DataService','TicketService','PicService','CategoryService','$location','$log', 
-    function ($scope, DataService,TicketService,PicService,CategoryService,$location,$log){
+app.controller('DetailController',['$scope','$route','DataService','TicketService','PicService','CategoryService','$location','$log', 
+    function ($scope, $route,DataService,TicketService,PicService,CategoryService,$location,$log){
         //$scope.id_ticket = JSON.stringify(DataService.get());
         $scope.id_ticket = DataService.get();
         $scope.ticket = { 
@@ -47,7 +47,8 @@ app.controller('DetailController',['$scope','DataService','TicketService','PicSe
         getTicket();
 
         function reset() {
-            $state.go($state.$current, null, { reload: true });
+            //$state.go($state.$current, null, { reload: true });
+            $route.reload();
         }
 
         function cancel(){

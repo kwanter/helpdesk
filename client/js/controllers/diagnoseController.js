@@ -1,5 +1,5 @@
 var diagnose = angular.module('app');
-diagnose.controller('DiagnoseCtrl', ['$scope', '$http', '$q', '$state', 'DataService', 'TicketService', function ($scope, $http, $q, $state, DataService, TicketService) {
+diagnose.controller('DiagnoseCtrl', ['$scope', '$http', '$q', '$route','$state', 'DataService', 'TicketService', function ($scope, $http, $q, $route,$state, DataService, TicketService) {
     var ip = self.location.host;
     var url = 'http://'+ip+'/helpdesk/api/';
     $scope.id_ticket = DataService.get();
@@ -108,7 +108,8 @@ diagnose.controller('DiagnoseCtrl', ['$scope', '$http', '$q', '$state', 'DataSer
     };
 
     function reset() {
-        $state.go($state.$current, null, { reload: true });
+        //$state.go($state.$current, null, { reload: true });
+        $route.reload();
     }
 
     $scope.getUser = function () {
