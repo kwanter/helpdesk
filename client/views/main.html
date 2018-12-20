@@ -143,13 +143,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-show="(tickets|filter:{stat : 'O'}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {stat : 'O'} | itemsPerPage: pageSize"
+                <tr ng-show="(tickets|filter:{stat : 'O'}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {stat : 'O'} | itemsPerPage: pageSize"
                   current-page="currentPage" pagination-id="open_mod">
                   <td>
                     <center><span ng-bind="c.id_ticket"></span></center>
                   </td>
                   <td><span ng-bind="c.problems"></span></td>
-                  <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                  <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                   <td><span ng-bind="c.username"></span></td>
                   <td><span ng-bind="c.created_date"></span></td>
                   <td>
@@ -196,13 +196,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-show="(tickets|filter:{stat : 'O', id_pic : user.id_user} | filter:{id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter:{id_user : user.id_user} | filter : {stat : 'O', id_pic: user.id_user} | itemsPerPage: pageSize"
+                  <tr ng-show="(tickets|filter:{stat : 'O', id_pic : user.id_user} | filter:{id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter:{id_user : user.id_user} | filter : {stat : 'O', id_pic: user.id_user} | itemsPerPage: pageSize"
                     current-page="currentPage" pagination-id="open_pic">
                     <td>
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
-                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                     <td><span ng-bind="c.username"></span></td>
                     <td><span ng-bind="c.created_date"></span></td>
                     <td>
@@ -266,13 +266,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P'}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {progress : '!100', stat : 'P'} | itemsPerPage: pageSize"
+                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P'}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {progress : '!100', stat : 'P'} | itemsPerPage: pageSize"
                     current-page="currentPage" pagination-id="progress_mod">
                     <td>
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
-                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                     <td><span ng-bind="c.pic"></span></td>
                     <td><span>{{c.user}}</span></td>
                     <td>
@@ -330,13 +330,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P',id_pic : user.id_user,id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {progress : '!100', stat : 'P', id_pic: user.id_user,id_user : user.id_user} | itemsPerPage: pageSize"
+                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P',id_pic : user.id_user,id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {progress : '!100', stat : 'P', id_pic: user.id_user,id_user : user.id_user} | itemsPerPage: pageSize"
                     current-page="currentPage" pagination-id="progress_pic">
                     <td>
                       <center><span ng-bind="c.id_ticket"></span></center>
                     </td>
                     <td><span ng-bind="c.problems"></span></td>
-                    <td><span><a ng-if="c.attachment" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk/api/file/{{user.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
                     <td><span ng-bind="c.user"></span></td>
                     <td>
                       <div class="clearfix">
@@ -638,7 +638,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-show="tickets.length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {stat : 'Ca' , stat : 'C'} | itemsPerPage: pageSize"
+                <tr ng-show="tickets.length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {stat : 'Ca' , stat : 'C'} | itemsPerPage: pageSize"
                   current-page="currentPage" pagination-id="closeID_mod">
                   <td>
                     <center><span ng-bind="c.id_ticket"></span></center>
@@ -701,7 +701,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-show="(tickets|filter:{stat : 'Ca' , stat : 'C',id_pic : user.id_user,id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {stat : 'Ca' , stat : 'C',id_pic : user.id_user,id_user : user.id_user} | itemsPerPage: pageSize"
+                <tr ng-show="(tickets|filter:{stat : 'Ca' , stat : 'C',id_pic : user.id_user,id_user : user.id_user}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {stat : 'Ca' , stat : 'C',id_pic : user.id_user,id_user : user.id_user} | itemsPerPage: pageSize"
                   current-page="currentPage" pagination-id="closeID_pic">
                   <td>
                     <center><span ng-bind="c.id_ticket"></span></center>

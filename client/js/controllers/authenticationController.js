@@ -1,7 +1,7 @@
 var app = angular.module("app");
 
 app.controller('AuthController', ['$scope', '$state','$route','$localStorage','AuthenticationService','$location',
-    function ($scope, $route,$state,$localStorage, AuthenticationService,$location) {
+    function ($scope, $state, $route,$localStorage, AuthenticationService,$location) {
         $scope.ip    = '192.168.0.0';
         $scope.login = login;
         $scope.reset = reset;
@@ -32,8 +32,8 @@ app.controller('AuthController', ['$scope', '$state','$route','$localStorage','A
         }
 
         function reset() {
-            //$state.go($state.$current, null, { reload: true });
-            $route.reload();
+            $state.go($state.$current, null, { reload: true, inherit: true, notify: true });
+            //$route.reload();
         }
 
         function login(){

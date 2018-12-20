@@ -54,8 +54,8 @@ app.controller('progressCtrl',['$scope','$http','$route','TicketService','DataSe
     }
 
     function reset(){
-        //$state.go($state.$current, null, { reload: true });
-        $route.reload();
+        $state.go($state.$current, null, { reload: true, inherit: true, notify: true });
+        //$route.reload();
     }
 
 }]);

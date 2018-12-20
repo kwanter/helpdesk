@@ -77,7 +77,7 @@ angular
     url: '/dashboard_user',
     templateUrl: 'views/main_user.html',
     ncyBreadcrumb: {
-      label: 'Dashboard User',
+      label: 'User',
     },
     params: { subtitle: 'Welcome to Ticket Information Page' },
     resolve: { authenticate: authenticate }

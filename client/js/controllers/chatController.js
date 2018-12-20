@@ -110,8 +110,8 @@ chat.controller('ChatCtrl', ['$rootScope','$scope','$route', '$http', '$q', '$st
     };
 
     function reset() {
-        //$state.go($state.$current, null, { reload: true });
-        $route.reload();
+        $state.go($state.$current, null, { reload: true, inherit: true, notify: true });
+        //$route.reload();
     }
 
     $scope.getUser = function () {

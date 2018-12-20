@@ -35,50 +35,53 @@ class Upload extends REST_Controller {
     }
 
     function upload_file($id){
-        $tahun = (new DateTime())->format('Y');
-        $bulan = (new DateTime())->format('M');
-        $hari  = (new DateTime())->format('D');
-        $waktu = (new DateTime())->format('H:i:s');
-        $type  = 'attachment';
-        $path  = $_FILES['file']['name'];
-        $ext   = pathinfo($path, PATHINFO_EXTENSION);
+        $file = $_FILES['file'];
+        if($file){
+             $tahun = (new DateTime())->format('Y');
+            $bulan = (new DateTime())->format('M');
+            $hari  = (new DateTime())->format('D');
+            $waktu = (new DateTime())->format('H:i:s');
+            $type  = 'attachment';
+            $path  = $_FILES['file']['name'];
+            $ext   = pathinfo($path, PATHINFO_EXTENSION);
 
-        $new_name   = "attch_".$waktu."_".$hari."_".$bulan."_".$tahun."_".$id;
-        $user = $this->tickets->get_user($id);      
-        $folderName = $user['id_user'];
-        $config['file_name']   = $new_name;
-        $config['upload_path'] = './file/'.$folderName.'/'.$type.'/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
-        $config['quality'] = '75';
+            $new_name   = "attch_".$waktu."_".$hari."_".$bulan."_".$tahun."_".$id;
+            $user = $this->tickets->get_user($id);      
+            $folderName = $user['id_user'];
+            $config['file_name']   = $new_name;
+            $config['upload_path'] = './file/'.$folderName.'/'.$type.'/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+            $config['quality'] = '75';
 
-        if(!is_dir('./file/'.$folderName.'/'.$type))
-        {
-            mkdir('./file/'.$folderName.'/'.$type, 0777,true);
-        }
+            if(!is_dir('./file/'.$folderName.'/'.$type))
+            {
+                mkdir('./file/'.$folderName.'/'.$type, 0777,true);
+            }
 
-        $this->upload->initialize($config);
+            $this->upload->initialize($config);
 
-        if($this->upload->do_upload('file'))
-        {
-            $gbr     = $this->upload->data();
-            $configer =  array(
-                'image_library'   => 'gd2',
-                'source_image'    =>  $gbr['full_path'],
-                'maintain_ratio'  =>  TRUE,
-                'width'           =>  1440,
-                'height'          =>  1920,
-            );
-            $this->image_lib->clear();
-            $this->image_lib->initialize($configer);
-            $this->image_lib->resize();
-            $gambar  = $gbr['file_name']; //Mengambil file name dari gambar yang diupload
-            $type    = $gbr['image_type'];
-            $now = (new DateTime())->format('Y-m-d');
-            $this->tickets->simpan_upload($id,$gambar,$type);
-            return TRUE;
-        }
-        else{
-            return FALSE;
+            if($this->upload->do_upload('file'))
+            {
+                $gbr     = $this->upload->data();
+                $configer =  array(
+                    'image_library'   => 'gd2',
+                    'source_image'    =>  $gbr['full_path'],
+                    'maintain_ratio'  =>  TRUE,
+                    'width'           =>  1440,
+                    'height'          =>  1920,
+                );
+                $this->image_lib->clear();
+                $this->image_lib->initialize($configer);
+                $this->image_lib->resize();
+                $gambar  = $gbr['file_name']; //Mengambil file name dari gambar yang diupload
+                $type    = $gbr['image_type'];
+                $now = (new DateTime())->format('Y-m-d');
+                $this->tickets->simpan_upload($id,$gambar,$type);
+                return TRUE;
+            }
+            else{
+                return FALSE;
+            }
         }
     }
 }

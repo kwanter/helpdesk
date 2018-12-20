@@ -111,8 +111,8 @@ solution.controller('SolutionCtrl', ['$scope', '$http','$q','$route','$state','D
     };
 
     function reset() {
-        //$state.go($state.$current, null, { reload: true });
-        $route.reload();
+        $state.go($state.$current, null, { reload: true, inherit: true, notify: true });
+        //$route.reload();
     }
 
     $scope.getUser = function (){

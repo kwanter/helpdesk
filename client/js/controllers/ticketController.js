@@ -300,26 +300,6 @@ app.controller('TicketController', ['$scope', 'TicketService','DataService','$ht
             );
     }
 
-    function createTicket(ticket) {
-        TicketService.createTicket(ticket)
-            .then(
-                reset,
-                function (errResponse) {
-                    console.error('Error while creating ticket : ' + errResponse);
-                }
-            );
-    }
-
-    function submit() {
-        if ($scope.ticket.contact_id === null) {
-            console.log('Saving New Contact', $scope.ticket);
-            createTicket($scope.ticket);
-        } else {
-            updateTicket($scope.ticket);
-            console.log('Ticket updated with id ', $scope.ticket.id_ticket);
-        }
-    }
-
     function reset() {
         //$state.go($state.$current, null, { reload: true });
         $route.reload();

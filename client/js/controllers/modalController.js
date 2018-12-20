@@ -3,6 +3,7 @@ var app = angular.module("app");
 app.controller("modalTicketFormController",
     function ($scope, $uibModal,$log ,$http,$state,TicketService,$route) {
         $scope.date = new Date();
+        $scope.file_name = '';
         $scope.user_list = {
             id_user : '',
             ip_address : '',
@@ -67,17 +68,19 @@ app.controller("modalTicketFormController",
                         };
 
                         var file = $scope.myFile;
-                        console.log('file is ');
-                        console.dir(file);
                         var uploadUrl = 'http://' + ip + '/helpdesk/api/upload';
-                        
                         TicketService.createTicket(data).then(
                             function(r){
-                                fileUpload.uploadFileToUrl(file, uploadUrl, r['id']);
+                                console.log('file is ');
+                                console.log($scope.file_name);
+                                console.dir(file);
+                                if (file != 'undefined' || file != undefined){
+                                    fileUpload.uploadFileToUrl(file, uploadUrl, r['id']);
+                                }
                                 alert('Tiket Berhasil Dibuat');
                                 $uibModalInstance.dismiss('cancel');
-                                //$state.go($state.$current, null, { reload: true });
-                                $route.reload();
+                                $state.go($state.$current, null, { reload: true, inherit: true, notify: true });
+                                //$state.forceReload();
                             },
                             function(err){
                                 console.log('Gagal Buat Tiket');
@@ -91,7 +94,8 @@ app.controller("modalTicketFormController",
                 },
                 resolve: {
                     ticket: function () {
-                        $state.go($state.$current, null, { reload: true }); 
+                        //$state.go($state.$current, null, { reload: true }); 
+                        $route.reload();
                         return $scope.ticket;
                     }
                 }

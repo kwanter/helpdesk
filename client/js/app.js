@@ -26,9 +26,9 @@ var app = angular
   'ngRoute'
 ])
 .config(['cfpLoadingBarProvider', '$qProvider', function (cfpLoadingBarProvider, $qProvider) {
-  cfpLoadingBarProvider.includeSpinner = false;
+  cfpLoadingBarProvider.includeSpinner = true;
   cfpLoadingBarProvider.latencyThreshold = 1;
-  $qProvider.errorOnUnhandledRejections(false);
+  $qProvider.errorOnUnhandledRejections(true);
 }])
 .run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams) {
   $rootScope.$on('$stateChangeSuccess',function(){
@@ -67,3 +67,17 @@ app.filter('startFrom', function () {
     return input.slice(start);
   }
 });
+
+app.config(function ($provide) {
+    $provide.decorator('$state', function ($delegate, $stateParams) {
+      $delegate.forceReload = function () {
+        return $delegate.go($delegate.current, $stateParams, {
+          reload: true,
+          inherit: false,
+          notify: true
+        });
+      };
+      return $delegate;
+    });
+  });
+
