@@ -1,0 +1,73 @@
+<style>
+    .sort-icon {
+    font-size: 9px;
+    margin-left: 5px;
+  }
+
+  th {
+    cursor:pointer;
+  }
+</style>
+<div class="animated fadeIn" ng-controller="AuthController as auth">
+    <div class="row" permission='["User"]'>
+        <div class="col-md-12">
+            <div class="card card-accent-dark">
+                <div class="card-header">
+                    <h3 class="card-title">New Ticket</h3>
+                </div>
+                <form  role="form" ng-submit="submit()" novalidate>
+                    <div class="card-group" id="detail">
+                        <div class="form-group col-md-6">
+                            <label for="date">Created Date</label>
+                            <input type="text" class="form-control" id="date" ng-model="ticket.created_date">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="problems">Problems</label>
+                            <textarea id="problems" name="problems" rows="2" ng-model="ticket.problems" class="form-control" ng-bind="ticket.problems"></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="user">User</label>
+                            <input type="hidden" ng-model="ticket.id_user" ng-value="ticket.id_user">
+                            <input type="text" disabled class="form-control" id="user" ng-value="ticket.username">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="category">Kategori</label>
+                            <!---
+                            <select id="pic" name="pic" class="form-control" ng-model="ticket.id_category" ng-selected="true" required ng-options="data.name_category for data in category track by data.id_category"></select>
+                            -->
+                            <select id="category" name="kategori" class="form-control" ng-model="ticket.id_category" required>
+                                <option value="">---Choose Category---</option>
+                                <option ng-repeat="data in category" ng-selected="{{data.id_category==ticket.id_category}}" value="{{data.id_category}}">{{data.name_category}}</option>
+                            </select>
+
+                            <p ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please choose this form before you
+                                submit.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center" permission='["Not_User"]'>
+        <div class="col-md-6">
+            <div class="clearfix">
+                <h1 class="float-left display-3 mr-4">500</h1>
+                <h4 class="pt-3">Houston, we have a problem!</h4>
+                <p class="text-muted">You Dont Have Permission To Access This Application. Please Contact Your IT Team</p>
+            </div>
+            <div class="input-prepend input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+                <input id="prependedInput" class="form-control" size="16" type="text" placeholder="What are you looking for?">
+                <span class="input-group-append">
+                    <button class="btn btn-info" type="button">Search</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

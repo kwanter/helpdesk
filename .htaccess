@@ -1,13 +1,14 @@
 <IfModule mod_rewrite.c>
     Options +FollowSymLinks
     RewriteEngine on
-    RewriteBase /client/
+    RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule .*[^/]$ %{REQUEST_URI}/ [L,R=301]
-    RewriteCond %{REQUEST_URI} ^/(.*)/$
-    RewriteCond %{DOCUMENT_ROOT}/client/%1.html -f
-    RewriteRule ^(.+)/$ $1.html [L]
-
+    RewriteCond %{REQUEST_URI} \.(jpe?g|bmp|png|gif|css|js|mp3|ogg)$ [NC]
+    RewriteCond %{QUERY_STRING} !^(.+?&v33|)v=33[^&]*(?:&(.*)|)$ [NC]
+    RewriteRule ^ %{REQUEST_URI}?v=33 [R=301,L]
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
 </IfModule>
 
 <IfModule !mod_rewrite.c>
