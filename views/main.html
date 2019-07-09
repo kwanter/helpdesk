@@ -1,0 +1,806 @@
+<style>
+  .sort-icon {
+    font-size: 9px;
+    margin-left: 5px;
+  }
+
+  th {
+    cursor:pointer;
+  }
+</style>
+<div class="animated fadeIn" ng-controller="AuthController as auth">
+  <div class="row" ng-controller="TicketController as ctrl" data-ng-init="init()">
+    <!--new ticket-->
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-info">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right">
+            
+          </div>
+          <h4 class="mb-0">{{ status_ticket.jumlah_open }}</h4>
+          <p>New Ticket</p>
+          <div class="h1 text-muted text-right mb-4">
+              <i class="icon-people"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
+        <div class="card text-white bg-warning">
+          <div class="card-body pb-0">
+          <div class="btn-group float-right">
+            
+          </div>
+          <h4 class="mb-0">{{ status_ticket.jumlah_progress }}</h4>
+          <p>On Progress</p>
+          <div class="h1 text-muted text-right mb-4">
+            <i class="icon-basket"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-danger">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right">
+            
+          </div>
+          <h4 class="mb-0">{{ status_ticket.jumlah_confirmation }}</h4>
+          <p>Confirmation Needed</p>
+          <div class="h1 text-muted text-right mb-4">
+            <i class="icon-chart"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+
+    <div permission="['PIC','Moderator']" class="col-sm-6 col-lg-3">
+      <div class="card text-white bg-success">
+        <div class="card-body pb-0">
+          <div class="btn-group float-right">
+            
+          </div>
+          <h4 class="mb-0" ng-bind="status_ticket.jumlah_close"></h4>
+          <p>Completed</p>
+          <div class="h1 text-muted text-right mb-4">
+            <i class="icon-chemistry"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+
+  <div permission="['PIC','Moderator']" class="row">
+    <div class="col-md-12">
+      <div>
+        <div class="page-body">
+            <button ng-controller="modalTicketFormController" class="btn btn-danger" ng-click="showForm()"><i class="icon-envelope-open icons"></i>&nbsp;New Ticket</button>
+            <!---<button class="btn btn-danger" ng-click="open()"><i class="icon-envelope-open icons"></i>&nbsp;New
+              Ticket</button>-->
+            <button class="btn btn-info" ng-click="reset()"><i class="icon-refresh icons"></i></i>&nbsp;Refresh</button>
+            <span><br></span>
+          <span><br></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card card-accent-info" ng-controller="TicketController as ctrl">
+        <div class="card-header">
+          <h3 class="card-title">New Ticket Lists</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="card-body">
+          <div permission="['Moderator']">
+            <table class="table table-bordered table-striped table-sm" width="100%">
+              <thead>
+                <tr>
+                  <th width="5%">
+                    <center>ID Ticket
+                  </th>
+                  <th width="55%">
+                    <center>Problems
+                  </th>
+                  <th width="10%">
+                    <cemter>Attachment</cemter>
+                  </th>
+                  <th width="10%">
+                    <center>User
+                  </th>
+                  <th width="10%">
+                    <center>Created Date
+                  </th>
+                  <th width="10%">
+                    <center>Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-show="(tickets|filter:{stat : 'O'}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {stat : 'O'} | itemsPerPage: pageSize"
+                  current-page="currentPage" pagination-id="open_mod">
+                  <td>
+                    <center><span ng-bind="c.id_ticket"></span></center>
+                  </td>
+                  <td><span ng-bind="c.problems"></span></td>
+                  <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk_api/file/{{c.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                  <td><span ng-bind="c.username"></span></td>
+                  <td><span ng-bind="c.created_date"></span></td>
+                  <td>
+                    <a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>
+                    <a permission="['PIC','Moderator']" ng-click='remove(c.id_ticket)' class='btn btn-warning btn-xs' title='Cancel'><i
+                        class='fa fa-remove'></i></a>&nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="6" ng-show="(tickets|filter:{stat : 'O'}).length === 0">
+                    <center>No data available.</center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center">
+              <dir-pagination-controls boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"
+                pagination-id="open_mod">
+              </dir-pagination-controls>
+            </div>
+          </div>
+          <div permission="['PIC']">
+              <table class="table table-bordered table-striped table-sm" width="100%">
+                <thead>
+                  <tr>
+                    <th width="5%">
+                      <center>ID Ticket
+                    </th>
+                    <th width="55%">
+                      <center>Problems
+                    </th>
+                    <th width="10%">
+                      <center>Attachment</center>
+                    </th>
+                    <th width="10%">
+                      <center>User
+                    </th>
+                    <th width="10%">
+                      <center>Created Date
+                    </th>
+                    <th width="10%">
+                      <center>Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-show="(tickets|filter:{stat : 'O'} | filterBy:['id_pic','id_user']:user.id_user).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | 
+                  filter : {stat : 'O'} | filterBy:['id_pic','id_user']:user.id_user |itemsPerPage: pageSize"
+                    current-page="currentPage" pagination-id="open_pic">
+                    <td>
+                      <center><span ng-bind="c.id_ticket"></span></center>
+                    </td>
+                    <td><span ng-bind="c.problems"></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk_api/file/{{c.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span ng-bind="c.username"></span></td>
+                    <td><span ng-bind="c.created_date"></span></td>
+                    <td>
+                      &nbsp;&nbsp;&nbsp;<a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>
+                      <a permission="['PIC','Moderator']" ng-click='remove(c.id_ticket)' class='btn btn-warning btn-xs' title='Cancel'><i
+                          class='fa fa-remove'></i></a>&nbsp;
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" ng-show="(tickets|filter:{stat : 'O'} | filterBy:['id_pic','id_user']:user.id_user).length === 0">
+                      <center>No data available.</center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"
+                  pagination-id="open_pic">
+                </dir-pagination-controls>
+              </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box Box New Ticket End-->
+      
+      <div class="card card-accent-primary" ng-controller="TicketController as ctrl">
+        <div class="card-header">
+          <h3 class="card-title">On Progress</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="card-body">
+          <div permission="['Moderator']">
+              <table class="table table-bordered table-striped table-sm" width="100%">
+                <thead>
+                  <tr>
+                    <th width="5%">
+                      <center>ID Ticket
+                    </th>
+                    <th width="40%">
+                      <center>Problems
+                    </th>
+                    <th width="5%">
+                      <center>Attachment</center>
+                    </th>
+                    <th width="10%">
+                      <center>PIC
+                    </th>
+                    <th width="10%">
+                      <center>User</center>
+                    </th>
+                    <th width="10%">
+                      <center>Progress
+                    </th>
+                    <th width="10%">
+                      <center>Created Date
+                    </th>
+                    <th width="10%">
+                      <center>Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P'}).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter : {progress : '!100', stat : 'P'} |itemsPerPage: pageSize"
+                    current-page="currentPage" pagination-id="progress_mod">
+                    <td>
+                      <center><span ng-bind="c.id_ticket"></span></center>
+                    </td>
+                    <td><span ng-bind="c.problems"></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk_api/file/{{c.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span ng-bind="c.pic"></span></td>
+                    <td><span>{{c.user}}</span></td>
+                    <td>
+                      <div class="clearfix">
+                        <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
+                      </div>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-danger" ng-style="width('{{c.progress}}')"></div>
+                      </div>
+                    </td>
+                    <td><span ng-bind="c.created_date"></span></td>
+                    <td>
+                      <a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>
+                      <a ng-click='escalate(c.id_ticket)' class='btn btn-danger btn-xs' title='Escalate'><i class='fa fa-close'></i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="8" ng-show="(tickets|filter:{progress : '!100', stat : 'P'}).length === 0">
+                      <center>No data available.</center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"
+                  pagination-id="progress_mod">
+                </dir-pagination-controls>
+              </div>
+          </div>
+          <div permission="['PIC']">
+              <table class="table table-bordered table-striped table-sm" width="100%">
+                <thead>
+                  <tr>
+                    <th width="5%">
+                      <center>ID Ticket
+                    </th>
+                    <th width="45%">
+                      <center>Problems
+                    </th>
+                    <th width="5%">
+                      <center>Attachment</center>
+                    </th>
+                    <th width="10%">
+                      <center>User
+                    </th>
+                    <th width="15%">
+                      <center>Progress
+                    </th>
+                    <th width="10%">
+                      <center>Created Date
+                    </th>
+                    <th width="10%">
+                      <center>Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-show="(tickets|filter:{progress : '!100', stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user ).length != 0" dir-paginate="c in tickets | 
+                  orderBy: 'created_date' : true | filter : {progress : '!100', stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user |itemsPerPage: pageSize"
+                    current-page="currentPage" pagination-id="progress_pic">
+                    <td>
+                      <center><span ng-bind="c.id_ticket"></span></center>
+                    </td>
+                    <td><span ng-bind="c.problems"></span></td>
+                    <td><span><a ng-if="c.attachment" target="_blank" href="http://{{user.server_addr}}/helpdesk_api/file/{{c.id_user}}/attachment/{{c.attachment}}">Attachment</a></span></td>
+                    <td><span ng-bind="c.username"></span></td>
+                    <td>
+                      <div class="clearfix">
+                        <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
+                      </div>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-danger" ng-style="width('{{c.progress}}')"></div>
+                      </div>
+                    </td>
+                    <td><span ng-bind="c.created_date"></span></td>
+                    <td>
+                      &nbsp;&nbsp;&nbsp;<a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>
+                      <a ng-click='escalate(c.id_ticket)' class='btn btn-danger btn-xs' title='Escalate'><i class='fa fa-close'></i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="8" ng-show="(tickets|filter:{progress : '!100', stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user ).length === 0">
+                      <center>No data available.</center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"
+                  pagination-id="progress_pic">
+                </dir-pagination-controls>
+              </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box Box On Progress End-->
+    </div>  
+    <div class="col-md-12">
+      <div permission="['PIC','Moderator']">
+        <div class="card card-accent-danger" ng-controller="TicketController as ctrl">
+          <div class="card-header">
+            <h3 class="card-title">Confirmation Needed</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="card-body">
+            <div permission="['Moderator']">
+                <table class="table table-bordered table-striped table-sm" width="100%">
+                  <thead>
+                    <tr>
+                      <th width="5%">
+                        <center>ID Ticket
+                      </th>
+                      <th width="60%">
+                        <center>Problems
+                      </th>
+                      <th width="15%">
+                        <center>User
+                      </th>
+                      <th width="20%">
+                        <center>Created Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {progress : 100 , stat : 'P'} | itemsPerPage: pageSize"
+                      current-page="currentPage" pagination-id="confirm_mod">
+                      <td>
+                        <center><span ng-bind="c.id_ticket" ng-model="ctrl.ticket.id_ticket"></span></center>
+                      </td>
+                      <td><span ng-bind="c.problems"></span></td>
+                      <td>
+                        <span ng-bind="c.username"></span>
+                      </td>
+                      <td><span ng-bind="c.created_date"></span></td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" ng-show="(tickets|filter:{progress : 100 , stat : 'P'}).length === 0">
+                        <center>No data available.</center>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-center">
+                  <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)"
+                    template-url="dirPagination.tpl.html" pagination-id="confirm_mod">
+                  </dir-pagination-controls>
+                </div>
+            </div>
+            <div permission="['PIC']">
+              <table class="table table-bordered table-striped table-sm" width="100%">
+                <thead>
+                  <tr>
+                    <th width="5%">
+                      <center>ID Ticket
+                    </th>
+                    <th width="60%">
+                      <center>Problems
+                    </th>
+                    <th width="15%">
+                      <center>User
+                    </th>
+                    <th width="20%">
+                      <center>Created Date
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-show="(tickets|filter:{progress : 100 , stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user).length != 0" dir-paginate="c in tickets 
+                  | orderBy: order?'id_ticket':'-id_ticket' | filter : {progress : 100 , stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user | itemsPerPage: pageSize"
+                    current-page="currentPage" pagination-id="confirm_pic">
+                    <td>
+                      <center><span ng-bind="c.id_ticket" ng-model="ctrl.ticket.id_ticket"></span></center>
+                    </td>
+                    <td><span ng-bind="c.problems"></span></td>
+                    <td>
+                      <span ng-bind="c.username"></span>
+                    </td>
+                    <td><span ng-bind="c.created_date"></span></td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" ng-show="(tickets|filter:{progress : 100 , stat : 'P'} | filterBy:['id_pic','id_user']:user.id_user).length === 0">
+                      <center>No data available.</center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center">
+                <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)"
+                  template-url="dirPagination.tpl.html" pagination-id="confirm_pic">
+                </dir-pagination-controls>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+      <!-- /.box Box Need Confirmation End -->
+      <div permission="['PIC','Moderator']">
+        <div class="card card-accent-warning" ng-controller="TicketController as ctrl">
+          <div class="card-header">
+            <h3 class="card-title">Escalation</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="card-body">
+            <div permission="['Moderator']">
+                <table class="table table-bordered table-striped table-sm" width="100%">
+                  <thead>
+                    <tr>
+                      <th width="5%">
+                        <center>ID Ticket</center>
+                      </th>
+                      <th width="45%">
+                        <center>Problems</center>
+                      </th>
+                      <th width="10%">
+                        <center>PIC</center>
+                      </th>
+                      <th width="15%">
+                        <center>Progress</center>
+                      </th>
+                      <th width="10%">
+                        <center>Created Date</center>
+                      </th>
+                      <th width="15%">
+                        <center>Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-show="(tickets|filter:{stat : 'E'}).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {stat : 'E'} | itemsPerPage: pageSize"
+                      current-page="currentPage" pagination-id="escalation_mod">
+                      <td>
+                        <center><span ng-bind="c.id_ticket"></span></center>
+                      </td>
+                      <td><span ng-bind="c.problems"></span></td>
+                      <td><span ng-bind="c.pic"></span></td>
+                      <td>
+                        <div class="clearfix">
+                          <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
+                        </div>
+                        <div class="progress xs">
+                          <div class="progress-bar progress-bar-danger" ng-style="width('{{c.progress}}')"></div>
+                        </div>
+                      </td>
+                      <td><span ng-bind="c.created_date"></span></td>
+                      <td>
+                        <a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>&nbsp;
+                        <a ng-click='return(c.id_ticket)' class='btn btn-warning btn-xs' title='Return'><i class='fa fa-dashboard'></i></a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="6" ng-show="(tickets|filter:{stat : 'E'}).length === 0">
+                        <center>No data available.</center>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-center">
+                  <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)"
+                    template-url="dirPagination.tpl.html" pagination-id="escalation_mod">
+                  </dir-pagination-controls>
+                </div>
+            </div>
+            <div permission="['PIC']">
+              <table class="table table-bordered table-striped table-sm" width="100%">
+                <thead>
+                  <tr>
+                    <th width="5%">
+                      <center>ID Ticket</center>
+                    </th>
+                    <th width="50%">
+                      <center>Problems</center>
+                    </th>
+                    <th width="10%">
+                      <center>PIC</center>
+                    </th>
+                    <th width="15%">
+                      <center>Progress</center>
+                    </th>
+                    <th width="10%">
+                      <center>Created Date</center>
+                    </th>
+                    <th width="10%">
+                      <center>Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-show="(tickets|filter:{stat : 'E' } | filterBy:['id_pic','id_user']:user.id_user ).length != 0" dir-paginate="c in tickets | orderBy: order?'id_ticket':'-id_ticket' | filter : {stat : 'E'} | filterBy:['id_pic','id_user']:user.id_user | itemsPerPage: pageSize"
+                    current-page="currentPage" pagination-id="escalation_pic">
+                    <td>
+                      <center><span ng-bind="c.id_ticket"></span></center>
+                    </td>
+                    <td><span ng-bind="c.problems"></span></td>
+                    <td><span ng-bind="c.pic"></span></td>
+                    <td>
+                      <div class="clearfix">
+                        <small class="pull-right"><span ng-bind="c.progress"></span> %</small>
+                      </div>
+                      <div class="progress xs">
+                        <div class="progress-bar progress-bar-danger" ng-style="width('{{c.progress}}')"></div>
+                      </div>
+                    </td>
+                    <td><span ng-bind="c.created_date"></span></td>
+                    <td>
+                      &nbsp;&nbsp;&nbsp;<a ng-click='detail(c.id_ticket)' class='btn btn-info btn-xs' title='Detail'><i class='fa fa-pencil'></i></a>&nbsp;
+                      <a ng-click='return(c.id_ticket)' class='btn btn-info btn-xs' title='Return'><i class='fa fa-dashboard'></i></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" ng-show="(tickets|filter:{stat : 'E'} | filterBy:['id_pic','id_user']:user.id_user).length === 0">
+                      <center>No data available.</center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center">
+                <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="ctrl.pageChangeHandler(newPageNumber)"
+                  template-url="dirPagination.tpl.html" pagination-id="escalation_pic">
+                </dir-pagination-controls>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+      <!-- /.box Box Escalation End -->
+    </div>
+  </div>
+  
+  <div permission="['PIC','Moderator']" class="row">
+    <div class="col-md-12">
+      <div class="card card-accent-success" ng-controller="TicketController as ctrl">
+        <div class="card-header">
+          <h3 class="card-title">Closed</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="card-body">
+          <div permission="['Moderator']">
+            <label>Search : <input ng-model="tickets.search"></label>
+            <table class="table table-bordered table-striped table-sm" width="100%">
+              <thead>
+                <tr>
+                  <th width="5%">
+                    <center>ID Ticket</center>
+                  </th>
+                  <th width="10%">
+                    <center>Created Date</center>
+                  </th>
+                  <th width="50%">
+                    <center>Problems</center>
+                  </th>
+                  <th width="5%">
+                    <center>Kategori</center>
+                  </th>
+                  <th width="10%">
+                    <center>User</center>
+                  </th>
+                  <th width="10%">
+                    <center>PIC</center>
+                  </th>
+                  <th width="10%">
+                    <center>Status</center>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-show="tickets.length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter: tickets.search |filter : {stat : 'Ca' , stat : 'C'} | itemsPerPage: pageSize"
+                  current-page="currentPage" pagination-id="closeID_mod">
+                  <td>
+                    <center><span ng-bind="c.id_ticket"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.created_date"></span></center>
+                  </td>
+                  <td><span ng-bind="c.problems"></span></td>
+                  <td>
+                    <center><span ng-bind="c.category"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.username"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.pic"></span></center>
+                  </td>
+                  <th>
+                    <center><span ng-bind="status('{{c.stat}}')"></span></center>
+                  </th>
+                </tr>
+                <tr>
+                  <td colspan="7" ng-show="(tickets|filter:{stat : 'Ca' , stat : 'C'}).length === 0">
+                    <center>No data available.</center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center">
+              <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+                template-url="dirPagination.tpl.html" pagination-id="closeID_mod">
+              </dir-pagination-controls>
+            </div>
+          </div>
+          <div permission="['PIC']">
+            <label>Search : <input ng-model="tickets.search"></label>
+            <table class="table table-bordered table-striped table-sm" width="100%">
+              <thead>
+                <tr>
+                  <th width="5%">
+                    <center>ID Ticket</center>
+                  </th>
+                  <th width="10%">
+                    <center>Created Date</center>
+                  </th>
+                  <th width="50%">
+                    <center>Problems</center>
+                  </th>
+                  <th width="5%">
+                    <center>Category</center>
+                  </th>
+                  <th width="10%">
+                    <center>User</center>
+                  </th>
+                  <th width="10%">
+                    <center>PIC</center>
+                  </th>
+                  <th width="10%">
+                    <center>Status</center>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-show="(tickets|filter:{stat : 'Ca' , stat : 'C'} | filterBy:['id_pic','id_user']:user.id_user).length != 0" dir-paginate="c in tickets | orderBy: 'created_date' : true | filter:tickets.search |filter : {stat : 'Ca' , stat : 'C'} | filterBy:['id_pic','id_user']:user.id_user | itemsPerPage: pageSize"
+                  current-page="currentPage" pagination-id="closeID_pic">
+                  <td>
+                    <center><span ng-bind="c.id_ticket"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.created_date"></span></center>
+                  </td>
+                  <td><span ng-bind="c.problems"></span></td>
+                  <td>
+                    <center><span ng-bind="c.category"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.username"></span></center>
+                  </td>
+                  <td>
+                    <center><span ng-bind="c.pic"></span></center>
+                  </td>
+                  <th>
+                    <center><span ng-bind="status('{{c.stat}}')"></span></center>
+                  </th>
+                </tr>
+                <tr>
+                  <td colspan="7" ng-show="(tickets|filter:{stat : 'Ca' , stat : 'C'} | filterBy:['id_pic','id_user']:user.id_user).length === 0">
+                    <center>No data available.</center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center">
+              <dir-pagination-controls direction-links="true" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)"
+                template-url="dirPagination.tpl.html" pagination-id="closeID_pic">
+              </dir-pagination-controls>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box Box Completed End-->
+    </div>
+  </div>
+  <div class="row justify-content-center" permission='["Not_User"]'>
+    <div class="col-md-6">
+      <div class="clearfix">
+        <h1 class="float-left display-3 mr-4">500</h1>
+        <h4 class="pt-3">Houston, we have a problem!</h4>
+        <p class="text-muted">You Dont Have Permission To Access This Application. Please Contact Your IT Team</p>
+      </div>
+      <div class="input-prepend input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-search"></i></span>
+        </div>
+        <input id="prependedInput" class="form-control" size="16" type="text" placeholder="What are you looking for?">
+        <span class="input-group-append">
+          <button class="btn btn-info" type="button">Search</button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <!-- Modal -->
+    <script type="text/ng-template" id="modal-form.html">
+        <div ng-class="{fadeOut: startFade}" ng-hide="hidden">
+            <div class="modal-content">
+                <form name="form" role="form" novalidate ng-submit="submit(form)">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Create A New Ticket!</h3>
+                  </div>
+                  <div class="modal-body">
+                      <!--- ID User -->
+                      <div class="form-group">
+                        <input type="hidden" ng-model="ticket.id_user" value="{{ticket.id_user}}">
+                      </div>
+                      <!-- Problem -->
+                      <div class="form-group">
+                        <label><b>Problem</b></label>
+                        <textarea rows="3" class="form-control" ng-model="ticket.problems" required></textarea>
+                        <p ng-show="form.problem.$invalid && !form.problem.$pristine" class="help-block">Please fill this form before you submit.</p>
+                      </div>
+                      <!-- Attachment -->
+                      <div class="form-group">
+                        <label><b>Attachment</b></label>
+                        <input type="file" class="form-control" ng-model="ticket.attachment">
+                      </div>
+                      <div class="form-group">
+                        <p class="response"> {{PostDataResponse}}</p>
+                        <p class="error"> {{ResponseDetails}}</p>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || form.$pristine">Submit</button>
+                    <button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </script>
+    <span><br></span>
+    <script type="text/ng-template" id="dirPagination.tpl.html">
+      <ul class="pagination" ng-if="1 < pages.length">
+        <li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }">
+          <a href="" ng-click="setCurrent(1)">&laquo;</a>
+        </li>
+        <li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }" class="ng-scope">
+          <a href="" ng-click="setCurrent(pagination.current - 1)" class="ng-binding">‹</a>
+        </li>
+        <li ng-repeat="pageNumber in pages track by $index" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == '...' }">
+          <a href="" ng-click="setCurrent(pageNumber)">{{ pageNumber }}</a>
+        </li>
+        <li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }" class="ng-scope">
+          <a href="" ng-click="setCurrent(pagination.current + 1)" class="ng-binding">›</a>
+        </li>
+        <li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }">
+          <a href="" ng-click="setCurrent(pagination.last)">&raquo;</a>
+        </li>
+      </ul>
+    </script>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<table ng-controller="TestController" class="table table-bordered table-striped" width="100%">
+    <thead>
+        <tr>
+            <th>
+                <center>ID</center>
+            </th>
+            <th>
+                <center>Email</center>
+            </th>
+            <th>
+                <center>First Name</center>
+            </th>
+            <th>
+                <center>Last Name</center>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="c in datadummy">
+            <td><center><span ng-bind="c.id"></span></center></td>
+            <td><center><span ng-bind="c.email"></span></center></td>
+            <td><span ng-bind="c.first_name"></span></td>
+            <td><center><span ng-bind="c.last_name"></span></center></td>
+        </tr>
+    </tbody>
+</table>
